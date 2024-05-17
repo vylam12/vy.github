@@ -1,6 +1,6 @@
-import 'package:cuoiki/pages/device_page.dart';
-import 'package:cuoiki/pages/home_page.dart';
-import 'package:cuoiki/pages/profile_page.dart';
+import 'package:cuoiki/pages/shop/shop_page.dart';
+import 'package:cuoiki/pages/home/home_page.dart';
+import 'package:cuoiki/pages/home/profile_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,7 @@ class DashBoardPage extends StatefulWidget {
 class _DashBoardPageState extends State<DashBoardPage> {
   final items = const [
     Icon(Icons.home, color: Colors.white),
-    Icon(Icons.devices, color: Colors.white),
+    Icon(Icons.shopping_bag_sharp, color: Colors.white),
     Icon(Icons.pets_rounded, color: Colors.white),
   ];
 
@@ -84,7 +84,7 @@ Widget getSelectedWidget({required int index, required int userId}) {
       widget = HomePage(userId: userId);
       break;
     case 1:
-      widget = DevicePage(userId: userId);
+      widget = const ShoppingPage();
       break;
     default:
       widget = ProfilePage(userId: userId);

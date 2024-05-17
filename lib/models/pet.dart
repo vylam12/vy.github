@@ -6,7 +6,7 @@ String usersToMap(Pets data) => json.encode(data.toMap());
 
 class Pets {
   int? id;
-  String? imgStr;
+  String imgStr;
   String breedName;
   int age;
   String color;
@@ -25,7 +25,7 @@ class Pets {
     required this.userId,
     required this.gender,
     required this.weight,
-    this.imgStr,
+    required this.imgStr,
   });
 
   factory Pets.fromMap(Map<String, dynamic> json) => Pets(

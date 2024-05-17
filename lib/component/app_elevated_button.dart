@@ -9,7 +9,7 @@ class AppElevatedButton extends StatelessWidget {
     required this.height,
     required this.width,
     required this.text,
-    required this.textColor,
+    this.textColor = AppColor.grey,
     required this.color,
     required this.borderColor,
     this.fontSize = 20.0,
@@ -28,25 +28,24 @@ class AppElevatedButton extends StatelessWidget {
       onTap: onPressed,
       child: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 26.0),
-          alignment: Alignment.center,
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: color,
-            border: Border.all(color: borderColor, width: 1.6),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 26.0),
+            alignment: Alignment.center,
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: color,
+              border: Border.all(color: borderColor, width: 1.6),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10.0),
+              ),
             ),
-          ),
-          child: Text(
-            text,
-            style: GoogleFonts.fredoka(
+            child: Text(
+              text,
+              style: GoogleFonts.fredoka(
                 fontSize: fontSize,
                 color: textColor,
-                textStyle: const TextStyle(color: AppColor.grey)),
-          ),
-        ),
+              ),
+            )),
       ),
     );
   }

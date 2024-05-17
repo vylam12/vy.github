@@ -1,4 +1,4 @@
-import 'package:cuoiki/pages/dashboard_page.dart';
+import 'package:cuoiki/pages/home/dashboard_page.dart';
 import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -27,7 +27,6 @@ class _LoadingPageState extends State<LoadingPage> {
     return Scaffold(
       backgroundColor: AppColor.green,
       body: Stack(
-        // alignment: Alignment.center,
         children: [
           Positioned.fill(
             child: Image.asset(

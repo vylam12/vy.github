@@ -2,7 +2,9 @@ import 'package:cuoiki/component/app_elevated_button.dart';
 import 'package:cuoiki/component/app_text_form_field.dart';
 import 'package:cuoiki/pages/loading_page.dart';
 import 'package:cuoiki/pages/sign/create_account_page.dart';
+import 'package:cuoiki/pages/sign/forget_pass_page.dart';
 import 'package:cuoiki/resources/app_color.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
@@ -59,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool isValidGmail(String email) {
-    final pattern = r'^[\w-]+(\.[\w-]+)*@gmail.com$';
+    const pattern = r'^[\w-]+(\.[\w-]+)*@gmail.com$';
     final regex = RegExp(pattern);
     return regex.hasMatch(email);
   }
@@ -125,16 +127,23 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     const SizedBox(height: 10.0),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 150.0, bottom: 40.0),
-                      child: Text(
-                        'Forget Password?',
-                        style: GoogleFonts.fredoka(
-                            fontSize: 20.0,
-                            textStyle: const TextStyle(
-                              color: AppColor.buttonColor,
-                              fontWeight: FontWeight.w400,
-                            )),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const ForgetPassPage()));
+                      },
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: 150.0, bottom: 40.0),
+                        child: Text(
+                          'Forget Password?',
+                          style: GoogleFonts.fredoka(
+                              fontSize: 20.0,
+                              textStyle: const TextStyle(
+                                color: AppColor.buttonColor,
+                                fontWeight: FontWeight.w400,
+                              )),
+                        ),
                       ),
                     ),
                     AppElevatedButton(

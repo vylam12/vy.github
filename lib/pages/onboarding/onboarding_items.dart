@@ -5,7 +5,7 @@ import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingItemsPage extends StatefulWidget {
-  const OnboardingItemsPage({Key? key}) : super(key: key);
+  const OnboardingItemsPage({super.key});
 
   @override
   State<OnboardingItemsPage> createState() => _OnboardingItemsPageState();
@@ -23,7 +23,7 @@ class _OnboardingItemsPageState extends State<OnboardingItemsPage> {
   void goToNextPage() {
     if (_currentPage < onboards.length - 1) {
       _pageController.nextPage(
-        duration: Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 100),
         curve: Curves.bounceIn,
       );
       setState(() {

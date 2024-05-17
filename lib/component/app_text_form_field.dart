@@ -23,16 +23,13 @@ class AppTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 60.0,
       width: 382.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(color: const Color.fromRGBO(212, 212, 212, 1)),
         color: AppColor.grey.withOpacity(0.5),
       ),
-
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      // margin: EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
         controller: controller,
         onChanged: onChanged,

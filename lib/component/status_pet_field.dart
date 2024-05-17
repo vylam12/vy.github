@@ -1,7 +1,5 @@
 import 'package:cuoiki/resources/app_color.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,9 +8,11 @@ class StatusPetField extends StatelessWidget {
       {super.key,
       required this.colorBackground,
       required this.text,
-      required this.icon});
+      required this.icon,
+      required this.textF});
   final Color colorBackground;
   final String text;
+  final String textF;
   final IconData icon;
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class StatusPetField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Health',
+              textF,
               style: GoogleFonts.fredoka(
                   fontSize: 14.0,
                   textStyle: const TextStyle(fontWeight: FontWeight.w500)),
@@ -60,7 +60,7 @@ class StatusPetField extends StatelessWidget {
             ),
           ],
         ),
-        Spacer(),
+        const Spacer(),
         Container(
           height: 45.0,
           width: 100.0,

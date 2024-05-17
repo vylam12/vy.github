@@ -1,13 +1,11 @@
 import 'dart:io';
-import 'package:cuoiki/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import '../SQLite/database_helper.dart';
-import '../component/app_elevated_button.dart';
-import '../component/app_text_field.dart';
-import '../models/pet.dart';
-import '../resources/app_color.dart';
+import '../../SQLite/database_helper.dart';
+import '../../component/app_elevated_button.dart';
+import '../../component/app_text_field.dart';
+import '../../models/pet.dart';
+import '../../resources/app_color.dart';
 
 class AddPetPage extends StatefulWidget {
   const AddPetPage({super.key, required this.userId});
@@ -73,29 +71,29 @@ class _AddPetPageState extends State<AddPetPage> {
         color.text.isEmpty) {
       String emptyFields = '';
       if (petName.text.isEmpty) {
-        emptyFields += 'Tên thú cưng, ';
+        emptyFields += 'pet name, ';
       }
       if (breedName.text.isEmpty) {
-        emptyFields += 'Giống thú cưng, ';
+        emptyFields += 'breed name, ';
       }
       if (height.text.isEmpty) {
-        emptyFields += 'Chiều cao, ';
+        emptyFields += 'height, ';
       }
       if (weight.text.isEmpty) {
-        emptyFields += 'Cân nặng, ';
+        emptyFields += 'weight, ';
       }
       if (gender.text.isEmpty) {
-        emptyFields += 'Giới tính, ';
+        emptyFields += 'gender, ';
       }
       if (age.text.isEmpty) {
-        emptyFields += 'Tuổi, ';
+        emptyFields += 'age, ';
       }
       if (color.text.isEmpty) {
-        emptyFields += 'Màu sắc, ';
+        emptyFields += 'color, ';
       }
       final snackBar = SnackBar(
-        content: Text('Vui lòng nhập đầy đủ thông tin thú cưng $emptyFields.'),
-        duration: Duration(seconds: 2),
+        content: Text('Please input information pet $emptyFields.'),
+        duration: const Duration(seconds: 2),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
@@ -130,12 +128,7 @@ class _AddPetPageState extends State<AddPetPage> {
         throw Exception('Thêm thú cưng thất bại');
       }
     } catch (error) {
-      final snackBar = SnackBar(
-        content: Text('Có lỗi xảy ra: $error'),
-        duration: Duration(seconds: 2),
-      );
       print(error);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
