@@ -1,8 +1,9 @@
-import 'package:cuoiki/pages/sign/login_page.dart';
-import 'package:cuoiki/pages/onboarding/onboarding_items.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../resources/app_color.dart';
+import '../sign/login_page.dart';
+import 'onboarding_items.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});

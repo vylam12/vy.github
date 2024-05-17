@@ -280,18 +280,18 @@ class _AddPetPageState extends State<AddPetPage> {
               },
             ),
             const SizedBox(height: 24.0),
-            Expanded(
-                child: ListView.builder(
-              itemCount: pets.length,
-              itemBuilder: (context, index) {
-                Pets pet = pets[index];
-                return ListTile(
-                  title: Text(pet.name),
-                  subtitle: Text(pet.breedName),
-                  // Hiển thị các thông tin khác về thú cưng
-                );
-              },
-            )),
+            // Expanded(
+            //     child: ListView.builder(
+            //   itemCount: pets.length,
+            //   itemBuilder: (context, index) {
+            //     Pets pet = pets[index];
+            //     return ListTile(
+            //       title: Text(pet.name),
+            //       subtitle: Text(pet.breedName),
+            //       // Hiển thị các thông tin khác về thú cưng
+            //     );
+            //   },
+            // )),
           ],
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:cuoiki/pages/sign/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
@@ -6,6 +5,7 @@ import '../../component/app_elevated_button.dart';
 import '../../component/app_text_form_field.dart';
 import '../../models/users.dart';
 import '../../resources/app_color.dart';
+import 'login_page.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});

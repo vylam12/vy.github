@@ -1,11 +1,10 @@
-import 'package:cuoiki/pages/sign/input_pass_forget.dart';
-import 'package:cuoiki/pages/sign/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
 import '../../resources/app_color.dart';
+import 'input_pass_forget.dart';
 
 class ForgetPassPage extends StatefulWidget {
   const ForgetPassPage({super.key});

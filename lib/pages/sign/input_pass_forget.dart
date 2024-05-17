@@ -1,9 +1,9 @@
-import 'package:cuoiki/pages/sign/succes_change_pass.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../component/app_elevated_button.dart';
 import '../../resources/app_color.dart';
+import 'succes_change_pass.dart';
 
 class InputPassForget extends StatefulWidget {
   const InputPassForget({super.key});

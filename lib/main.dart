@@ -1,6 +1,6 @@
-import 'package:cuoiki/pages/onboarding/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'pages/onboarding/onboarding_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

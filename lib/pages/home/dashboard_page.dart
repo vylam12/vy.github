@@ -1,9 +1,9 @@
-import 'package:cuoiki/pages/shop/shop_page.dart';
-import 'package:cuoiki/pages/home/home_page.dart';
-import 'package:cuoiki/pages/home/profile_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../shop/shop_page.dart';
+import 'home_page.dart';
+import 'profile_page.dart';
 
 class DashBoardPage extends StatefulWidget {
   const DashBoardPage({Key? key, required this.userId}) : super(key: key);

@@ -1,14 +1,12 @@
 import 'dart:io';
-
-import 'package:cuoiki/component/info_pet_detail.dart';
-import 'package:cuoiki/component/status_pet_field.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../../component/info_pet_detail.dart';
 import '../../component/oval_bottom_clipper.dart';
+import '../../component/status_pet_field.dart';
 import '../../models/pet.dart';
+import '../../resources/app_color.dart';
 
 class PetDetailPage extends StatelessWidget {
   const PetDetailPage({super.key, required this.pet});

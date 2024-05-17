@@ -1,16 +1,16 @@
-import 'package:cuoiki/component/dog_field.dart';
-import 'package:cuoiki/component/food_item.dart';
-import 'package:cuoiki/component/pet_status.dart';
-import 'package:cuoiki/models/food.dart';
-import 'package:cuoiki/pages/pet/add_pet_page.dart';
-import 'package:cuoiki/pages/pet/pet_detail_page.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
+import '../../component/dog_field.dart';
+import '../../component/food_item.dart';
+import '../../component/pet_status.dart';
+import '../../models/food.dart';
 import '../../models/pet.dart';
+import '../../resources/app_color.dart';
+import '../pet/add_pet_page.dart';
+import '../pet/pet_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.userId});
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Ẩn nút quay về
+        automaticallyImplyLeading: false,
         backgroundColor: AppColor.green,
         title: const Text('Hey'),
       ),
@@ -225,24 +225,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        // Row(
-                        //   crossAxisAlignment: CrossAxisAlignment.center,
-                        //   children: [
-                        //     const Gap(10),
-                        //     for (var pet in _pets)
-                        //       Padding(
-                        //         padding:
-                        //             const EdgeInsets.symmetric(horizontal: 5.0),
-                        //         child: PetStatus(
-                        //           petImage: pet.imgStr?.isNotEmpty == true
-                        //               ? pet.imgStr!
-                        //               : '',
-                        //         ),
-                        //       ),
-                        //     const Gap(10),
-                        //   ],
-                        // ),
-                        Gap(20.0),
+                        const Gap(20.0),
                         Expanded(
                           child: PageView.builder(
                             itemCount: _pets.length,
@@ -289,6 +272,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+                        Gap(40.0),
                         const Text('Không có pet')
                       ],
                     ),

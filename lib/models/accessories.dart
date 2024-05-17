@@ -9,7 +9,7 @@ class Accessories {
   });
 }
 
-List<Accessories> accessories = [
+List<Accessories> accessoriesList = [
   Accessories(
     imgUrl: 'assets/images/ass1.jpg',
     nameaccess: 'Dog Collar',

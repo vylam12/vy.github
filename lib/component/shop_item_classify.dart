@@ -1,7 +1,8 @@
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../resources/app_color.dart';
 
 class ShopItemClassify extends StatelessWidget {
   const ShopItemClassify(

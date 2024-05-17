@@ -1,8 +1,13 @@
-import 'package:cuoiki/component/shop_item_classify.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../component/product_item.dart';
+import '../../component/shop_item_classify.dart';
+import '../../models/accessories.dart';
+import '../../models/devices.dart';
+import '../../models/food.dart';
+import '../../models/vet.dart';
+import '../../resources/app_color.dart';
 
 class ShoppingPage extends StatefulWidget {
   const ShoppingPage({super.key});
@@ -12,14 +17,55 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
+  int selectedCategoryIndex = 0;
+  List<dynamic> filteredProducts = [];
   List<Map<String, dynamic>> categories = [
     {'icon': Icons.fastfood_sharp, 'label': 'Food'},
     {'icon': Icons.health_and_safety_rounded, 'label': 'Vet Items'},
     {'icon': Icons.pets, 'label': 'Accessories'},
     {'icon': Icons.devices, 'label': 'IOT Devices'},
   ];
+  List<Map<String, dynamic>> product = [
+    {'foods': foods},
+    {'vets': vetList},
+    {'accessories': accessoriesList},
+    {'devices': devicesList},
+  ];
+  void searchProducts(String keyword) {
+    filteredProducts.clear(); // Xóa danh sách sản phẩm đã lọc trước đó
 
-  int selectedCategoryIndex = 0;
+    // Lặp qua danh sách sản phẩm của danh mục đã chọn
+    List<dynamic> productList = product[selectedCategoryIndex].values.first;
+    for (dynamic productItem in productList) {
+      if (productItem is Foods) {
+        Foods food = productItem;
+        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
+        if (food.namefood!.toLowerCase().contains(keyword.toLowerCase())) {
+          filteredProducts.add(food);
+        }
+      } else if (productItem is Vet) {
+        Vet vet = productItem;
+        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
+        if (vet.namevet!.toLowerCase().contains(keyword.toLowerCase())) {
+          filteredProducts.add(vet);
+        }
+      } else if (productItem is Accessories) {
+        Accessories accessories = productItem;
+        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
+        if (accessories.nameaccess!
+            .toLowerCase()
+            .contains(keyword.toLowerCase())) {
+          filteredProducts.add(accessories);
+        }
+      } else if (productItem is Devices) {
+        Devices devices = productItem;
+        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
+        if (devices.namedv!.toLowerCase().contains(keyword.toLowerCase())) {
+          filteredProducts.add(devices);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +105,11 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   ],
                 ),
                 child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchProducts(value);
+                    });
+                  },
                   decoration: InputDecoration(
                     hintText: 'Search keywords..',
                     icon: const Icon(
@@ -107,9 +158,56 @@ class _ShoppingPageState extends State<ShoppingPage> {
               ],
             ),
             Expanded(
-                child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {},
-            ))
+              child: GridView.builder(
+                itemCount: product[selectedCategoryIndex].values.first.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final List<dynamic> productList =
+                      product[selectedCategoryIndex].values.first;
+                  final dynamic productItem = productList[index];
+                  if (productItem is Foods) {
+                    final Foods food = productItem;
+                    return ProductItem(
+                      priceProduct: food.price!.toStringAsFixed(2),
+                      nameProduct: food.namefood ?? '',
+                      imageProduct: food.imgUrl ?? '',
+                      weight: food.weight.toString(),
+                    );
+                  } else if (productItem is Vet) {
+                    final Vet vet = productItem;
+                    return ProductItem(
+                      nameProduct: vet.namevet ?? '',
+                      imageProduct: vet.imgUrl ?? '',
+                      weight: '',
+                      priceProduct: vet.price!.toStringAsFixed(2),
+                    );
+                  } else if (productItem is Accessories) {
+                    final Accessories accessories = productItem;
+                    return ProductItem(
+                      nameProduct: accessories.nameaccess ?? '',
+                      imageProduct: accessories.imgUrl ?? '',
+                      priceProduct: accessories.price!.toStringAsFixed(2),
+                      weight: '',
+                    );
+                  } else if (productItem is Devices) {
+                    final Devices devices = productItem;
+                    return ProductItem(
+                      priceProduct: devices.price!.toStringAsFixed(2),
+                      weight: '',
+                      nameProduct: devices.namedv ?? '',
+                      imageProduct: devices.imgUrl ?? '',
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 2 / 2.83),
+              ),
+            ),
+            const Gap(10.0),
           ],
         ),
       ),

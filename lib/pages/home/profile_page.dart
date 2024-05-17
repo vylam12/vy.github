@@ -1,11 +1,11 @@
-import 'package:cuoiki/pages/pet/add_pet_page.dart';
-import 'package:cuoiki/pages/sign/login_page.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../SQLite/database_helper.dart';
+import '../../resources/app_color.dart';
+import '../pet/add_pet_page.dart';
+import '../sign/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.userId});

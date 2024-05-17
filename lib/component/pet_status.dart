@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:cuoiki/models/pet.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../models/pet.dart';
+import '../resources/app_color.dart';
 
 class PetStatus extends StatelessWidget {
   const PetStatus(
@@ -114,7 +114,7 @@ class PetStatus extends StatelessWidget {
                     width: 51,
                     height: 10,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(229, 77, 77, 1.0),
+                        color: const Color.fromRGBO(229, 77, 77, 1.0),
                         borderRadius: BorderRadius.circular(20.0)),
                   ),
                   const Gap(82.0),

@@ -1,14 +1,14 @@
-import 'package:cuoiki/component/app_elevated_button.dart';
-import 'package:cuoiki/component/app_text_form_field.dart';
-import 'package:cuoiki/pages/loading_page.dart';
-import 'package:cuoiki/pages/sign/create_account_page.dart';
-import 'package:cuoiki/pages/sign/forget_pass_page.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
+import '../../component/app_elevated_button.dart';
+import '../../component/app_text_form_field.dart';
 import '../../models/users.dart';
+import '../../resources/app_color.dart';
+import '../loading_page.dart';
+import 'create_account_page.dart';
+import 'forget_pass_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -72,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
-          // Đóng bàn phím khi nhấp vào bất kỳ đâu trên màn hình
           FocusScope.of(context).unfocus();
         },
         child: Stack(

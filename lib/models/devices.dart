@@ -9,7 +9,7 @@ class Devices {
   });
 }
 
-List<Devices> accessories = [
+List<Devices> devicesList = [
   Devices(
     imgUrl: 'assets/images/dv1.jpg',
     namedv: 'GPS Pet Tracker',

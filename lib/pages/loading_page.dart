@@ -1,7 +1,7 @@
-import 'package:cuoiki/pages/home/dashboard_page.dart';
-import 'package:cuoiki/resources/app_color.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../resources/app_color.dart';
+import 'home/dashboard_page.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key, required this.userId});

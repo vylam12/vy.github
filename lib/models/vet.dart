@@ -9,7 +9,7 @@ class Vet {
   });
 }
 
-List<Vet> vet = [
+List<Vet> vetList = [
   Vet(
     imgUrl: 'assets/images/vet1.jpg',
     namevet: 'Wet Dog - Flea',

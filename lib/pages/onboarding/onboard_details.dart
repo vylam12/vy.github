@@ -1,7 +1,7 @@
-import 'package:cuoiki/models/onboard_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../component/app_elevated_button.dart';
+import '../../models/onboard_details.dart';
 import '../../resources/app_color.dart';
 
 class OnboardDetailsPage extends StatelessWidget {
