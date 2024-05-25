@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../SQLite/database_helper.dart';
@@ -56,12 +58,21 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        title: Text(
+          'Profile',
+          style: GoogleFonts.fredoka(
+              fontSize: 25.0,
+              textStyle: const TextStyle(
+                  fontWeight: FontWeight.w500, color: Colors.white)),
+        ),
+        backgroundColor: AppColor.green,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
+            const Gap(20),
             Stack(
               children: [
                 image != null

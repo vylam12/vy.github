@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
@@ -6,7 +6,7 @@ import '../../component/app_elevated_button.dart';
 import '../../component/app_text_form_field.dart';
 import '../../models/users.dart';
 import '../../resources/app_color.dart';
-import '../loading_page.dart';
+import '../home/loading_page.dart';
 import 'create_account_page.dart';
 import 'forget_pass_page.dart';
 
@@ -41,10 +41,17 @@ class _LoginPageState extends State<LoginPage> {
         (route) => false,
       );
     } else {
-      //Otherwise show the error message
       setState(() {
         isLoginTrue = true;
       });
+      Fluttertoast.showToast(
+          msg: "Username & Password Invalid!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 

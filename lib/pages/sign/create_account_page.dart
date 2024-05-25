@@ -27,6 +27,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final db = DatabaseHelper();
 
   Future<void> signUp() async {
+    if (!isValidForm()) {
+      showSnackbar('Please fill in all fields correctly.');
+      return;
+    }
+
     try {
       var res = await db.createUser(Users(
           email: email.text,
@@ -43,8 +48,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         showSnackbar('Failed to create user.');
       }
     } catch (error) {
-      showSnackbar('Error: $error');
+      print('Error: $error');
+      showSnackbar('Failed to create user.');
     }
+  }
+
+  bool isValidForm() {
+    return isEmailValid && isPasswordValid && isConfirmPasswordValid;
   }
 
   void showSnackbar(String message) {

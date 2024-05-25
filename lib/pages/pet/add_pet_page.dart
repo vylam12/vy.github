@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:carepet/pages/home/dashboard_page.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
@@ -17,15 +19,15 @@ class AddPetPage extends StatefulWidget {
 class _AddPetPageState extends State<AddPetPage> {
   File? image;
   String? imagePath;
+  String? gender;
   final height = TextEditingController();
   final weight = TextEditingController();
   final petName = TextEditingController();
   final breedName = TextEditingController();
-  final gender = TextEditingController();
   final age = TextEditingController();
   final color = TextEditingController();
   final db = DatabaseHelper();
-  List<Pets> pets = []; // Danh sách thú cưng
+  List<Pets> pets = [];
   @override
   void initState() {
     super.initState();
@@ -34,21 +36,34 @@ class _AddPetPageState extends State<AddPetPage> {
 
   String validate() {
     if (petName.text.isEmpty) {
-      return 'Vui lòng nhập tên thú cưng';
+      return 'Please enter your pet\'s name';
     } else if (breedName.text.isEmpty) {
-      return 'Vui lòng nhập giống thú cưng';
+      return 'Please enter pet breed';
     } else if (height.text.isEmpty) {
-      return 'Vui lòng nhập chiều cao';
+      return 'Please enter your pet\'s height';
+    } else if (!isNumeric(height.text)) {
+      return 'Height must be a number';
     } else if (weight.text.isEmpty) {
-      return 'Vui lòng nhập cân nặng';
-    } else if (gender.text.isEmpty) {
-      return 'Vui lòng nhập giới tính';
+      return 'Please enter your pet\'s weight';
+    } else if (!isNumeric(weight.text)) {
+      return 'Weight must be a number';
+    } else if (gender == null) {
+      return 'Please select your pet\'s gender';
     } else if (age.text.isEmpty) {
-      return 'Vui lòng nhập tuổi';
+      return 'Please enter your pet\'s age';
+    } else if (!isNumeric(age.text)) {
+      return 'Age must be a number';
     } else if (color.text.isEmpty) {
-      return 'Vui lòng nhập màu sắc';
+      return 'Please enter your pet\'s color';
     }
     return 'isChecked';
+  }
+
+  bool isNumeric(String str) {
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
   }
 
   Future<void> pickImage() async {
@@ -62,48 +77,32 @@ class _AddPetPageState extends State<AddPetPage> {
   }
 
   Future<void> addPet() async {
-    if (petName.text.isEmpty ||
-        breedName.text.isEmpty ||
-        height.text.isEmpty ||
-        weight.text.isEmpty ||
-        gender.text.isEmpty ||
-        age.text.isEmpty ||
-        color.text.isEmpty) {
-      String emptyFields = '';
-      if (petName.text.isEmpty) {
-        emptyFields += 'pet name, ';
-      }
-      if (breedName.text.isEmpty) {
-        emptyFields += 'breed name, ';
-      }
-      if (height.text.isEmpty) {
-        emptyFields += 'height, ';
-      }
-      if (weight.text.isEmpty) {
-        emptyFields += 'weight, ';
-      }
-      if (gender.text.isEmpty) {
-        emptyFields += 'gender, ';
-      }
-      if (age.text.isEmpty) {
-        emptyFields += 'age, ';
-      }
-      if (color.text.isEmpty) {
-        emptyFields += 'color, ';
-      }
+    String validationResult = validate();
+    if (validationResult != 'isChecked') {
       final snackBar = SnackBar(
-        content: Text('Please input information pet $emptyFields.'),
+        content: Text(validationResult),
         duration: const Duration(seconds: 2),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
+
+    // Kiểm tra hình ảnh
+    if (image == null) {
+      final snackBar = SnackBar(
+        content: Text('Please select an image for your pet.😓'),
+        duration: const Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
     double heightValue = double.tryParse(height.text) ?? 0.0;
     double weightValue = double.tryParse(weight.text) ?? 0.0;
     int ageValue = int.tryParse(age.text) ?? 0;
     try {
       Pets myPet = Pets(
-        imgStr: image != null ? image!.path : '',
+        imgStr: image!.path,
         name: petName.text,
         breedName: breedName.text,
         color: color.text,
@@ -111,21 +110,21 @@ class _AddPetPageState extends State<AddPetPage> {
         height: heightValue,
         weight: weightValue,
         age: ageValue,
-        gender: gender.text,
+        gender: gender ?? '',
       );
       var insertedPetId = await db.addPetForUser(widget.userId, myPet);
       if (insertedPetId > 0) {
         if (!mounted) return;
         getPets();
         Navigator.pop(context);
-        // Hiển thị snackbar
+
         final snackBar = SnackBar(
-          content: Text('Thêm thú cưng thành công!'),
+          content: Text('Added pets successfully! 😘'),
           duration: Duration(seconds: 2),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
-        throw Exception('Thêm thú cưng thất bại');
+        throw Exception('More failed pets 😓');
       }
     } catch (error) {
       print(error);
@@ -141,12 +140,8 @@ class _AddPetPageState extends State<AddPetPage> {
         });
       }
     } catch (error) {
-      final snackBar = SnackBar(
-        content: Text(
-            'Có lỗi xảy ra khi lấy danh sách thú cưng: $error id ${widget.userId}'),
-        duration: const Duration(seconds: 2),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print(
+          'Có lỗi xảy ra khi lấy danh sách thú cưng: $error id ${widget.userId}');
     }
   }
 
@@ -164,7 +159,14 @@ class _AddPetPageState extends State<AddPetPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Quay lại trang trước đó
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DashBoardPage(
+                  userId: widget.userId,
+                ),
+              ),
+            );
           },
         ),
       ),
@@ -180,11 +182,11 @@ class _AddPetPageState extends State<AddPetPage> {
                   height: 120.0,
                   child: image != null
                       ? CircleAvatar(
-                          radius: 54.0,
+                          radius: 50.0,
                           backgroundImage: FileImage(image!),
                         )
                       : const CircleAvatar(
-                          radius: 54.0,
+                          radius: 50.0,
                           backgroundImage:
                               AssetImage('assets/images/nguoidung.png'),
                         ),
@@ -211,21 +213,21 @@ class _AddPetPageState extends State<AddPetPage> {
                     ))
               ],
             ),
-            const SizedBox(height: 10.0),
+            const Gap(20),
             AppTextField(
               text: 'Pet Name',
               controller: petName,
               width: 353.0,
               textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 15.0),
+            const Gap(15),
             AppTextField(
               text: 'Breed Name',
               width: 353.0,
               controller: breedName,
               textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 15.0),
+            const Gap(15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -243,19 +245,48 @@ class _AddPetPageState extends State<AddPetPage> {
                 )
               ],
             ),
-            const SizedBox(height: 15.0),
+            const Gap(15),
+            SizedBox(
+              width: 353,
+              child: DropdownButtonFormField<String>(
+                value: gender,
+                onChanged: (value) {
+                  setState(() {
+                    gender = value;
+                  });
+                },
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Male',
+                    child: Text('Male'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Female',
+                    child: Text('Female'),
+                  ),
+                ],
+                decoration: InputDecoration(
+                  hintText: 'Gender',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(212, 212, 212, 1)),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(212, 212, 212, 1)),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+            const Gap(15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AppTextField(
-                  text: 'Gender',
-                  controller: gender,
-                  textInputAction: TextInputAction.next,
-                  width: 106.0,
-                ),
-                AppTextField(
                   text: 'Age',
-                  width: 106.0,
+                  width: 172.0,
                   controller: age,
                   textInputAction: TextInputAction.next,
                 ),
@@ -263,11 +294,11 @@ class _AddPetPageState extends State<AddPetPage> {
                   text: 'Color',
                   controller: color,
                   textInputAction: TextInputAction.done,
-                  width: 106.0,
+                  width: 172.0,
                 )
               ],
             ),
-            const SizedBox(height: 24.0),
+            const Gap(24),
             AppElevatedButton(
               height: 51.0,
               width: 358.0,
@@ -279,19 +310,7 @@ class _AddPetPageState extends State<AddPetPage> {
                 addPet();
               },
             ),
-            const SizedBox(height: 24.0),
-            // Expanded(
-            //     child: ListView.builder(
-            //   itemCount: pets.length,
-            //   itemBuilder: (context, index) {
-            //     Pets pet = pets[index];
-            //     return ListTile(
-            //       title: Text(pet.name),
-            //       subtitle: Text(pet.breedName),
-            //       // Hiển thị các thông tin khác về thú cưng
-            //     );
-            //   },
-            // )),
+            const Gap(24),
           ],
         ),
       ),

@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadPets();
+    setState(() {});
   }
 
   Future<void> _loadPets() async {
@@ -98,24 +99,27 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         const Gap(10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Gap(10),
-                            for (var pet in _pets)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: DogField(
-                                  onTap: () => _navigateToPetDetail(pet),
-                                  petName: pet.name ?? '',
-                                  petImage: pet.imgStr?.isNotEmpty == true
-                                      ? pet.imgStr!
-                                      : '',
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Gap(10),
+                              for (var pet in _pets)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: DogField(
+                                    onTap: () => _navigateToPetDetail(pet),
+                                    petName: pet.name ?? '',
+                                    petImage: pet.imgStr?.isNotEmpty == true
+                                        ? pet.imgStr!
+                                        : '',
+                                  ),
                                 ),
-                              ),
-                            const Gap(10),
-                          ],
+                              const Gap(10),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -272,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        Gap(40.0),
+                        const Gap(40.0),
                         const Text('Không có pet')
                       ],
                     ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../component/product_item.dart';
@@ -18,10 +20,11 @@ class ShoppingPage extends StatefulWidget {
 
 class _ShoppingPageState extends State<ShoppingPage> {
   int selectedCategoryIndex = 0;
+  String searchKeyword = '';
   List<dynamic> filteredProducts = [];
   List<Map<String, dynamic>> categories = [
-    {'icon': Icons.fastfood_sharp, 'label': 'Food'},
-    {'icon': Icons.health_and_safety_rounded, 'label': 'Vet Items'},
+    {'icon': FontAwesomeIcons.bone, 'label': 'Food'},
+    {'icon': FontAwesomeIcons.shieldCat, 'label': 'Vet Items'},
     {'icon': Icons.pets, 'label': 'Accessories'},
     {'icon': Icons.devices, 'label': 'IOT Devices'},
   ];
@@ -31,40 +34,43 @@ class _ShoppingPageState extends State<ShoppingPage> {
     {'accessories': accessoriesList},
     {'devices': devicesList},
   ];
-  void searchProducts(String keyword) {
-    filteredProducts.clear(); // Xóa danh sách sản phẩm đã lọc trước đó
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = product[selectedCategoryIndex].values.first;
+  }
 
-    // Lặp qua danh sách sản phẩm của danh mục đã chọn
-    List<dynamic> productList = product[selectedCategoryIndex].values.first;
-    for (dynamic productItem in productList) {
-      if (productItem is Foods) {
-        Foods food = productItem;
-        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
-        if (food.namefood!.toLowerCase().contains(keyword.toLowerCase())) {
-          filteredProducts.add(food);
-        }
-      } else if (productItem is Vet) {
-        Vet vet = productItem;
-        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
-        if (vet.namevet!.toLowerCase().contains(keyword.toLowerCase())) {
-          filteredProducts.add(vet);
-        }
-      } else if (productItem is Accessories) {
-        Accessories accessories = productItem;
-        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
-        if (accessories.nameaccess!
-            .toLowerCase()
-            .contains(keyword.toLowerCase())) {
-          filteredProducts.add(accessories);
-        }
-      } else if (productItem is Devices) {
-        Devices devices = productItem;
-        // Kiểm tra nếu tên sản phẩm chứa từ khóa tìm kiếm
-        if (devices.namedv!.toLowerCase().contains(keyword.toLowerCase())) {
-          filteredProducts.add(devices);
+  void searchProducts(String keywords) {
+    setState(() {
+      searchKeyword = keywords;
+      filteredProducts = [];
+      List<dynamic> productList = product[selectedCategoryIndex].values.first;
+      for (dynamic productItem in productList) {
+        if (productItem is Foods) {
+          Foods food = productItem;
+          if (food.namefood!.toLowerCase().contains(keywords.toLowerCase())) {
+            filteredProducts.add(food);
+          }
+        } else if (productItem is Vet) {
+          Vet vet = productItem;
+          if (vet.namevet!.toLowerCase().contains(keywords.toLowerCase())) {
+            filteredProducts.add(vet);
+          }
+        } else if (productItem is Accessories) {
+          Accessories accessories = productItem;
+          if (accessories.nameaccess!
+              .toLowerCase()
+              .contains(keywords.toLowerCase())) {
+            filteredProducts.add(accessories);
+          }
+        } else if (productItem is Devices) {
+          Devices devices = productItem;
+          if (devices.namedv!.toLowerCase().contains(keywords.toLowerCase())) {
+            filteredProducts.add(devices);
+          }
         }
       }
-    }
+    });
   }
 
   @override
@@ -105,11 +111,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   ],
                 ),
                 child: TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      searchProducts(value);
-                    });
-                  },
+                  onChanged: searchProducts,
                   decoration: InputDecoration(
                     hintText: 'Search keywords..',
                     icon: const Icon(
@@ -130,19 +132,26 @@ class _ShoppingPageState extends State<ShoppingPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: List.generate(
-                    categories.length,
-                    (index) => GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedCategoryIndex = index;
-                        });
-                      },
-                      child: ShopItemClassify(
-                        icon: categories[index]['icon'],
-                        hintText: categories[index]['label'],
-                        isSelected: selectedCategoryIndex == index,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      categories.length,
+                      (index) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCategoryIndex = index;
+                            searchKeyword =
+                                ''; // Xóa từ khóa tìm kiếm khi chuyển danh mục
+                            filteredProducts =
+                                product[selectedCategoryIndex].values.first;
+                          });
+                        },
+                        child: ShopItemClassify(
+                          icon: categories[index]['icon'],
+                          hintText: categories[index]['label'],
+                          isSelected: selectedCategoryIndex == index,
+                        ),
                       ),
                     ),
                   ),
@@ -159,10 +168,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
             ),
             Expanded(
               child: GridView.builder(
-                itemCount: product[selectedCategoryIndex].values.first.length,
+                itemCount: searchKeyword.isEmpty
+                    ? product[selectedCategoryIndex].values.first.length
+                    : filteredProducts.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final List<dynamic> productList =
-                      product[selectedCategoryIndex].values.first;
+                  final List<dynamic> productList = searchKeyword.isEmpty
+                      ? product[selectedCategoryIndex].values.first
+                      : filteredProducts;
                   final dynamic productItem = productList[index];
                   if (productItem is Foods) {
                     final Foods food = productItem;

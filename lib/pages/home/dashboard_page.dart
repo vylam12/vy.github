@@ -1,3 +1,4 @@
+import 'package:carepet/pages/vet/vet_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,8 +17,14 @@ class _DashBoardPageState extends State<DashBoardPage> {
   final items = const [
     Icon(Icons.home, color: Colors.white),
     Icon(Icons.shopping_bag_sharp, color: Colors.white),
+    Icon(Icons.health_and_safety_rounded, color: Colors.white),
     Icon(Icons.pets_rounded, color: Colors.white),
   ];
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
 
   int index = 0;
   @override
@@ -85,6 +92,9 @@ Widget getSelectedWidget({required int index, required int userId}) {
       break;
     case 1:
       widget = const ShoppingPage();
+      break;
+    case 2:
+      widget = const VetPage();
       break;
     default:
       widget = ProfilePage(userId: userId);

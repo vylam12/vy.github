@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import '../resources/app_color.dart';
-import 'home/dashboard_page.dart';
+import '../../resources/app_color.dart';
+import 'dashboard_page.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key, required this.userId});
