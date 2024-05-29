@@ -1,6 +1,7 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
 import '../../component/app_text_form_field.dart';
@@ -35,6 +36,10 @@ class _LoginPageState extends State<LoginPage> {
     if (res == true) {
       int usrId = usrDetails?.usrId ?? 0;
       if (!mounted) return;
+      //lưu trạng thái đăng nhập
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isLoggedIn', true);
+      prefs.setInt('userId', usrId);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoadingPage(userId: usrId)),

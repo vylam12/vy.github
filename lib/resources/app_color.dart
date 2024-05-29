@@ -12,4 +12,5 @@ class AppColor {
   static const Color yellow = Color.fromARGB(255, 250, 235, 20);
   static const Color blue = Colors.blue;
   static const Color red = Colors.red;
+  static const Color pink = Color.fromARGB(255, 245, 118, 172);
 }

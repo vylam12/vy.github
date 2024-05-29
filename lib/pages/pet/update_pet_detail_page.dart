@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:carepet/pages/home/dashboard_page.dart';
+import 'dart:typed_data';
+import 'package:carepet/pages/pet/pet_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,14 +10,16 @@ import '../../component/app_text_field.dart';
 import '../../models/pet.dart';
 import '../../resources/app_color.dart';
 
-class AddPetPage extends StatefulWidget {
-  const AddPetPage({super.key, required this.userId});
+class UpdatePetDetailPage extends StatefulWidget {
+  const UpdatePetDetailPage(
+      {super.key, required this.petId, required this.userId});
+  final int petId;
   final int userId;
   @override
-  State<AddPetPage> createState() => _AddPetPageState();
+  State<UpdatePetDetailPage> createState() => _UpdatePetDetailPageState();
 }
 
-class _AddPetPageState extends State<AddPetPage> {
+class _UpdatePetDetailPageState extends State<UpdatePetDetailPage> {
   File? image;
   String? imagePath;
   String? gender;
@@ -27,42 +30,50 @@ class _AddPetPageState extends State<AddPetPage> {
   final age = TextEditingController();
   final color = TextEditingController();
   final db = DatabaseHelper();
-  List<Pets> pets = [];
+  Pets pet = Pets(
+      age: 0,
+      breedName: "breedName",
+      name: "name",
+      color: "color",
+      height: 123,
+      userId: 0,
+      gender: "",
+      weight: 0,
+      imgStr: "");
+  Future<String?> getPetImage() async {
+    return await db.getPetImageById(widget.userId);
+  }
+
   @override
   void initState() {
     super.initState();
+    getPets(widget.petId);
+    loadPetsValue(pet);
+    getPetImage().then((String? imagePath) {
+      if (imagePath != null) {
+        setState(() {
+          image = File(imagePath);
+        });
+      }
+    });
   }
 
-  String validate() {
-    if (petName.text.isEmpty) {
-      return 'Please enter your pet\'s name';
-    } else if (breedName.text.isEmpty) {
-      return 'Please enter pet breed';
-    } else if (height.text.isEmpty) {
-      return 'Please enter your pet\'s height';
-    } else if (!isNumeric(height.text)) {
-      return 'Height must be a number';
-    } else if (weight.text.isEmpty) {
-      return 'Please enter your pet\'s weight';
-    } else if (!isNumeric(weight.text)) {
-      return 'Weight must be a number';
-    } else if (gender == null) {
-      return 'Please select your pet\'s gender';
-    } else if (age.text.isEmpty) {
-      return 'Please enter your pet\'s age';
-    } else if (!isNumeric(age.text)) {
-      return 'Age must be a number';
-    } else if (color.text.isEmpty) {
-      return 'Please enter your pet\'s color';
-    }
-    return 'isChecked';
+  Future<void> loadPetsValue(Pets pet) async {
+    height.text = pet.height.toString();
+    weight.text = pet.weight.toString();
+    petName.text = pet.name.toString();
+    breedName.text = pet.breedName.toString();
+    gender = pet.gender.toString();
+    age.text = pet.age.toString();
+    color.text = pet.color.toString();
   }
 
-  bool isNumeric(String str) {
-    if (str == null) {
-      return false;
-    }
-    return double.tryParse(str) != null;
+  Future<void> getPets(int petId) async {
+    var petData = await db.getPetById(petId);
+    await loadPetsValue(petData);
+    setState(() {
+      pet = petData;
+    });
   }
 
   Future<void> pickImage() async {
@@ -75,62 +86,39 @@ class _AddPetPageState extends State<AddPetPage> {
     });
   }
 
-  Future<void> addPet() async {
-    String validationResult = validate();
-    if (validationResult != 'isChecked') {
-      final snackBar = SnackBar(
-        content: Text(validationResult),
-        duration: const Duration(seconds: 2),
+  Future<void> updatePets() async {
+    if (gender == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select gender")),
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
+    Map<String, dynamic> updateData = {
+      "imgStr": image != null ? image!.path : '',
+      "height": height.text,
+      "weight": weight.text,
+      "name": petName.text,
+      "breedName": breedName.text,
+      "gender": gender,
+      "age": age.text,
+      "color": color.text
+    };
 
-    // Kiểm tra hình ảnh
-    if (image == null) {
-      final snackBar = SnackBar(
-        content: Text('Please select an image for your pet.😓'),
-        duration: const Duration(seconds: 2),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      return;
-    }
-
-    double heightValue = double.tryParse(height.text) ?? 0.0;
-    double weightValue = double.tryParse(weight.text) ?? 0.0;
-    int ageValue = int.tryParse(age.text) ?? 0;
-    try {
-      Pets myPet = Pets(
-        imgStr: image!.path,
-        name: petName.text,
-        breedName: breedName.text,
-        color: color.text,
-        userId: widget.userId,
-        height: heightValue,
-        weight: weightValue,
-        age: ageValue,
-        gender: gender ?? '',
-      );
-      var insertedPetId = await db.addPetForUser(widget.userId, myPet);
-      if (insertedPetId > 0) {
-        if (!mounted) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DashBoardPage(userId: widget.userId),
-          ),
-        );
-
-        final snackBar = SnackBar(
-          content: Text('Added pets successfully! 😘'),
-          duration: Duration(seconds: 2),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        throw Exception('More failed pets 😓');
-      }
-    } catch (error) {
-      print(error);
+    var result = await db.updatePetById(updateData, widget.petId);
+    if (result == 1) {
+      var petData = await db.getPetById(widget.petId);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => PetDetailPage(
+                pet: petData,
+                userId: widget.userId,
+              )));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Update success!!! 😘"),
+        duration: Duration(seconds: 2),
+      ));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Update failed!!!😣")));
     }
   }
 
@@ -139,23 +127,17 @@ class _AddPetPageState extends State<AddPetPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          backgroundColor: AppColor.green,
-          title: const Text(
-            'Add Pet',
-            style: TextStyle(color: AppColor.textButton),
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DashBoardPage(
-                            userId: widget.userId,
-                          )));
-            },
-          )),
+        backgroundColor: AppColor.green,
+        title: const Text('Update Pet',
+            style: TextStyle(color: AppColor.textButton)),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -175,11 +157,11 @@ class _AddPetPageState extends State<AddPetPage> {
                       height: 120.0,
                       child: image != null
                           ? CircleAvatar(
-                              radius: 50.0,
+                              radius: 54.0,
                               backgroundImage: FileImage(image!),
                             )
                           : const CircleAvatar(
-                              radius: 50.0,
+                              radius: 54.0,
                               backgroundImage:
                                   AssetImage('assets/images/nguoidung.png'),
                             ),
@@ -198,30 +180,27 @@ class _AddPetPageState extends State<AddPetPage> {
                                   Border.all(color: AppColor.green, width: 2.0),
                               color: AppColor.textButton.withOpacity(0.9),
                             ),
-                            child: const Icon(
-                              Icons.camera_alt_outlined,
-                              color: AppColor.green,
-                              size: 27.0,
-                            ),
+                            child: const Icon(Icons.camera_alt_outlined,
+                                color: AppColor.green, size: 27.0),
                           ),
                         ))
                   ],
                 ),
-                const Gap(20),
+                const SizedBox(height: 10.0),
                 AppTextField(
                   text: 'Pet Name',
                   controller: petName,
                   width: 353.0,
                   textInputAction: TextInputAction.next,
                 ),
-                const Gap(15),
+                const SizedBox(height: 15.0),
                 AppTextField(
                   text: 'Breed Name',
                   width: 353.0,
                   controller: breedName,
                   textInputAction: TextInputAction.next,
                 ),
-                const Gap(15),
+                const SizedBox(height: 15.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -239,7 +218,7 @@ class _AddPetPageState extends State<AddPetPage> {
                     )
                   ],
                 ),
-                const Gap(15),
+                const SizedBox(height: 15.0),
                 SizedBox(
                   width: 353,
                   child: DropdownButtonFormField<String>(
@@ -292,19 +271,19 @@ class _AddPetPageState extends State<AddPetPage> {
                     )
                   ],
                 ),
-                const Gap(24),
+                const SizedBox(height: 24.0),
                 AppElevatedButton(
                   height: 51.0,
                   width: 358.0,
-                  text: 'Add Pet',
+                  text: 'Update Pet',
                   textColor: AppColor.textButton,
                   color: AppColor.green,
                   borderColor: AppColor.green,
                   onPressed: () {
-                    addPet();
+                    updatePets();
                   },
                 ),
-                const Gap(24),
+                const SizedBox(height: 24.0),
               ],
             ),
           ),

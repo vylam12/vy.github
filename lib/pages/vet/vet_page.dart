@@ -32,6 +32,7 @@ class _VetPageState extends State<VetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Vet',
           style: GoogleFonts.fredoka(

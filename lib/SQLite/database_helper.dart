@@ -88,6 +88,18 @@ class DatabaseHelper {
     return db.insert("pets", pet.toMap());
   }
 
+// get img pet
+  Future<String?> getPetImageById(int petId) async {
+    final Database db = await initDB();
+    var res = await db.query("pets", where: "petId = ?", whereArgs: [petId]);
+    if (res.isNotEmpty) {
+      var pet = Pets.fromMap(res.first);
+      return pet.imgStr;
+    } else {
+      return null;
+    }
+  }
+
   //get pet
   Future<List<Pets>> getPetsByUserId(int userId) async {
     final Database db = await initDB();
@@ -108,5 +120,26 @@ class DatabaseHelper {
     String imagePath = imageFile;
     await db.rawUpdate(
         "UPDATE users SET imgStr = ? WHERE usrId = ?", [imagePath, userId]);
+  }
+
+  Future<Pets> getPetById(int petId) async {
+    final Database db = await initDB();
+    var res = await db.query("pets", where: "petId = ?", whereArgs: [petId]);
+    final Pets pet = Pets.fromMap(res.first);
+    return pet;
+  }
+
+  Future<int> updatePetById(Map<String, dynamic> pets, int id) async {
+    final Database db = await initDB();
+    int count =
+        await db.update("pets", pets, where: "petId = ?", whereArgs: [id]);
+    return count;
+  }
+
+//delete pet
+  Future<int> deletePetById(int petId) async {
+    final Database db = await initDB();
+    int count = await db.delete("pets", where: "petId = ?", whereArgs: [petId]);
+    return count;
   }
 }

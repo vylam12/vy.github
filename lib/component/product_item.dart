@@ -36,43 +36,64 @@ class ProductItem extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                    height: 94.0,
-                    width: 91.0,
-                    child: Image.asset(
-                      imageProduct,
-                      fit: BoxFit.cover,
-                    )),
-                const Gap(10),
-                Text(
-                  priceProduct,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 13.0,
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, color: AppColor.green),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 13.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      height: 94.0,
+                      width: 91.0,
+                      child: Image.asset(
+                        imageProduct,
+                        fit: BoxFit.cover,
+                      )),
+                  const Gap(10),
+                  Text(
+                    priceProduct,
+                    style: GoogleFonts.fredoka(
+                      fontSize: 13.0,
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, color: AppColor.green),
+                    ),
                   ),
-                ),
-                Text(
-                  nameProduct,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 16.0,
-                    textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                  Text(
+                    nameProduct,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.fredoka(
+                      fontSize: 16.0,
+                      textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
                   ),
-                ),
-                Text(
-                  weight,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 13.0,
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, color: AppColor.grey),
-                  ),
-                )
-              ],
+                  Text(weight,
+                      style: GoogleFonts.fredoka(
+                          fontSize: 13.0,
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.grey))),
+                  const Divider(
+                      thickness: 1, color: Color.fromARGB(255, 226, 226, 226)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: AppColor.green,
+                      ),
+                      const Gap(5),
+                      Text('Add to cart',
+                          style: GoogleFonts.fredoka(
+                              fontSize: 14.0,
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.black))),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ],

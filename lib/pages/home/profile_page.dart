@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import '../../SQLite/database_helper.dart';
 import '../../resources/app_color.dart';
@@ -19,8 +20,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File? image;
-  final db = DatabaseHelper();
   String? userImage;
+  final db = DatabaseHelper();
 
   Future<String?> getProfileImage() async {
     return await db.getUserImageById(widget.userId);
@@ -36,6 +37,16 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     });
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('userId');
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const LoginPage()),
+        (route) => false);
   }
 
   Future<void> pickImage() async {
@@ -66,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fontWeight: FontWeight.w500, color: Colors.white)),
         ),
         backgroundColor: AppColor.green,
+        automaticallyImplyLeading: false,
         centerTitle: true,
       ),
       body: Padding(
@@ -83,8 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     : const CircleAvatar(
                         radius: 54.0,
                         backgroundImage:
-                            AssetImage('assets/images/nguoidung.png'),
-                      ),
+                            AssetImage('assets/images/nguoidung.png')),
                 Positioned(
                     bottom: 0.0,
                     right: 0.0,
@@ -111,16 +122,14 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               width: 372.0,
               decoration: BoxDecoration(
-                color: AppColor.textButton,
-                borderRadius: BorderRadius.circular(10.0),
-                border:
-                    Border.all(color: const Color.fromRGBO(212, 212, 212, 1)),
-              ),
+                  color: AppColor.textButton,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
+                      color: const Color.fromRGBO(212, 212, 212, 1))),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -149,14 +158,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         ]),
                       ),
                     ),
+                    const Gap(10),
                     Container(
                       child: GestureDetector(
-                        onTap: () {
-                          Route route = MaterialPageRoute(
-                              builder: (context) => const LoginPage());
-                          Navigator.pushAndRemoveUntil(
-                              context, route, (Route<dynamic> route) => false);
-                        },
+                        onTap: logout,
                         child: const Row(children: [
                           Icon(
                             Icons.sign_language,

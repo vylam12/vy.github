@@ -1,5 +1,9 @@
 import 'dart:io';
+import 'package:carepet/component/app_elevated_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../component/info_pet_detail.dart';
@@ -7,16 +11,32 @@ import '../../component/oval_bottom_clipper.dart';
 import '../../component/status_pet_field.dart';
 import '../../models/pet.dart';
 import '../../resources/app_color.dart';
+import '../home/dashboard_page.dart';
+import 'update_pet_detail_page.dart';
 
 class PetDetailPage extends StatelessWidget {
-  const PetDetailPage({super.key, required this.pet});
+  const PetDetailPage({super.key, required this.pet, required this.userId});
 
   final Pets pet;
+  final int userId;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DashBoardPage(userId: userId),
+                ),
+              );
+            },
+          ),
+        ),
         body: Center(
           child: Stack(
             children: [
@@ -51,12 +71,32 @@ class PetDetailPage extends StatelessWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  pet.name ?? '',
-                                  style: GoogleFonts.fredoka(
-                                      fontSize: 27.0,
-                                      textStyle: const TextStyle(
-                                          fontWeight: FontWeight.w700)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      pet.name ?? '',
+                                      style: GoogleFonts.fredoka(
+                                          fontSize: 27.0,
+                                          textStyle: const TextStyle(
+                                              fontWeight: FontWeight.w700)),
+                                    ),
+                                    const Gap(10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdatePetDetailPage(
+                                                      petId: pet.id!,
+                                                      userId: userId,
+                                                    )));
+                                      },
+                                      child: const Icon(
+                                          FontAwesomeIcons.penToSquare,
+                                          size: 20),
+                                    ),
+                                  ],
                                 ),
                                 Text(
                                   pet.breedName ?? '',
@@ -73,19 +113,31 @@ class PetDetailPage extends StatelessWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  decoration: BoxDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 245, 118, 172),
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)),
-                                  child: const Icon(
-                                    Icons.female,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                                (pet.gender == 'Female')
+                                    ? Container(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.pink,
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: const Icon(
+                                          Icons.female,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.blue,
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: const Icon(
+                                          Icons.male,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ],
                             ),
                             const Gap(20.0),
@@ -140,10 +192,8 @@ class PetDetailPage extends StatelessWidget {
                       Row(
                         children: [
                           const Gap(10),
-                          const Icon(
-                            Icons.sentiment_satisfied_alt_outlined,
-                            size: 26.27,
-                          ),
+                          const Icon(Icons.sentiment_satisfied_alt_outlined,
+                              size: 26.27),
                           const Gap(5),
                           Text(
                             '${pet.name} Status',
@@ -199,7 +249,7 @@ class PetDetailPage extends StatelessWidget {
                       radius: 55,
                       backgroundImage: FileImage(
                         File(
-                          pet.imgStr?.isNotEmpty == true ? pet.imgStr! : '',
+                          pet.imgStr.isNotEmpty == true ? pet.imgStr : '',
                         ),
                       ),
                     ),

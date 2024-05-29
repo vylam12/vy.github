@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadPets();
-    setState(() {});
   }
 
   Future<void> _loadPets() async {
@@ -43,9 +42,57 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PetDetailPage(pet: pet),
+        builder: (context) => PetDetailPage(pet: pet, userId: widget.userId),
       ),
     );
+  }
+
+  Future<void> _deletePet(Pets pet) async {
+    bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Delete Pet 😣',
+            style: GoogleFonts.fredoka(
+                fontSize: 22.0,
+                textStyle: const TextStyle(fontWeight: FontWeight.w600)),
+          ),
+          content: Text(
+            'Are you sure you want to delete pet ${pet.name}?',
+            style: GoogleFonts.fredoka(
+                fontSize: 18.0,
+                textStyle: const TextStyle(fontWeight: FontWeight.w400)),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      var result = await db.deletePetById(pet.id!);
+      if (result == 1) {
+        setState(() {
+          _pets.remove(pet);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Pet ${pet.name} has been deleted.'),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to delete pet ${pet.name}.'),
+        ));
+      }
+    }
   }
 
   @override
@@ -111,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                                       horizontal: 5.0),
                                   child: DogField(
                                     onTap: () => _navigateToPetDetail(pet),
+                                    onLongPress: () => _deletePet(pet),
                                     petName: pet.name ?? '',
                                     petImage: pet.imgStr?.isNotEmpty == true
                                         ? pet.imgStr!
