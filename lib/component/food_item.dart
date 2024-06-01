@@ -9,14 +9,8 @@ class FoodItem extends StatelessWidget {
   const FoodItem(
     this.food, {
     super.key,
-    this.onAdd,
-    this.onRemove,
-    this.onDelete,
   });
 
-  final Function()? onAdd;
-  final Function()? onRemove;
-  final Function()? onDelete;
   final Foods food;
 
   @override
@@ -43,7 +37,8 @@ class FoodItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${food.namefood}',
+                  '${food.name}',
+                  maxLines: 2,
                   style: GoogleFonts.fredoka(
                       fontSize: 13.0,
                       textStyle: const TextStyle(
@@ -51,6 +46,7 @@ class FoodItem extends StatelessWidget {
                 ),
                 Text(
                   '${food.desc}',
+                  maxLines: 2,
                   style: GoogleFonts.fredoka(
                       fontSize: 13.0,
                       textStyle: const TextStyle(fontWeight: FontWeight.w600)),

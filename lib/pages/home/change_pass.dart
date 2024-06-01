@@ -1,25 +1,31 @@
+import 'package:carepet/pages/home/dashboard_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
+import '../../models/users.dart';
 import '../../resources/app_color.dart';
-import 'succes_change_pass.dart';
 
-class InputPassForget extends StatefulWidget {
-  const InputPassForget({super.key, required this.userId});
+class ChangePass extends StatefulWidget {
+  const ChangePass({super.key, required this.userId});
   final int userId;
 
   @override
-  State<InputPassForget> createState() => _InputPassForgetState();
+  State<ChangePass> createState() => _ChangePassState();
 }
 
-class _InputPassForgetState extends State<InputPassForget> {
+class _ChangePassState extends State<ChangePass> {
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
+  final currentPassword = TextEditingController();
   final db = DatabaseHelper();
   bool isPasswordValid = true;
   bool isConfirmPasswordValid = true;
+  bool isCurrentPasswordValid = true;
+
   void validatePassword(String value) {
     setState(() {
       isPasswordValid = value.length >= 8;
@@ -32,14 +38,50 @@ class _InputPassForgetState extends State<InputPassForget> {
     });
   }
 
+  void validateCurrentPassword(String value) {
+    setState(() {
+      isCurrentPasswordValid = value.length >= 8;
+    });
+  }
+
+  Future<bool> checkCurrentPassword(String currentPassword) async {
+    Users? userInfo = await db.getUserInfo(widget.userId);
+    return userInfo != null && userInfo.password == currentPassword;
+  }
+
   Future<void> submit() async {
+    bool isCurrentPasswordCorrect =
+        await checkCurrentPassword(currentPassword.text);
+    if (!isCurrentPasswordCorrect) {
+      setState(() {
+        isCurrentPasswordValid = false;
+      });
+      Fluttertoast.showToast(
+          msg: "Current password is incorrect!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return;
+    }
     int res = await db.changePasswordByUserId(widget.userId, password.text);
     print(res);
+    Fluttertoast.showToast(
+        msg: "Password changed successfully!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
     if (res != 0) {
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SuccessChangePage()),
+        MaterialPageRoute(
+            builder: (context) => DashBoardPage(userId: widget.userId)),
       );
     }
   }
@@ -60,7 +102,6 @@ class _InputPassForgetState extends State<InputPassForget> {
               onPressed: () => Navigator.pop(context)),
         ),
       ),
-      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -91,14 +132,54 @@ class _InputPassForgetState extends State<InputPassForget> {
                       )),
                   const Gap(20.0),
                   Text(
-                    "Reset your password",
+                    "Change password",
                     style: GoogleFonts.fredoka(
-                        fontSize: 25.0,
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.textButton)),
+                      fontSize: 25.0,
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.textButton,
+                      ),
+                    ),
                   ),
                   const Gap(20.0),
+                  Container(
+                    width: 382.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: AppColor.buttonColor),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: currentPassword,
+                      onChanged: validateCurrentPassword,
+                      obscureText: true,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.lock_outline_rounded,
+                          color: AppColor.green.withOpacity(0.7),
+                        ),
+                        hintText: 'Current Password',
+                        hintStyle: GoogleFonts.fredoka(
+                          fontSize: 18.0,
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.green.withOpacity(0.7),
+                          ),
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  if (!isCurrentPasswordValid)
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: Text('Password must be at least 8 digits long',
+                          style: TextStyle(
+                              color: AppColor.textButton, fontSize: 13.0)),
+                    ),
+                  const Gap(15),
                   Container(
                       width: 382.0,
                       decoration: BoxDecoration(
@@ -150,8 +231,10 @@ class _InputPassForgetState extends State<InputPassForget> {
                       obscureText: true,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.lock_outline_rounded,
-                            color: AppColor.green.withOpacity(0.7)),
+                        icon: Icon(
+                          Icons.lock_outline_rounded,
+                          color: AppColor.green.withOpacity(0.7),
+                        ),
                         hintText: 'Confirm Password',
                         hintStyle: GoogleFonts.fredoka(
                           fontSize: 18.0,

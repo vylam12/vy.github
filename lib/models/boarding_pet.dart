@@ -26,12 +26,16 @@ List<BoardingPet> boardingPetList = [
       rate: 4.5,
       price: 120,
       time: 'Monday - Friday at 8.00 am - 5.00pm',
+      desc:
+          'Pet boarding facilities, also known as pet hotels or pet resorts, are specialized establishments that provide temporary care and accommodation for companion animals like dogs and cats when their owners are away. These facilities are staffed by trained and experienced caretakers who are dedicated to ensuring the comfort, safety, and well-being of the pets in their charge.',
       distance: 2.5),
   BoardingPet(
       id: 2,
       imgUrl: 'assets/images/bd3.jpg',
       name: 'Cutie Paws',
       price: 120,
+      desc:
+          'Pet boarding facilities, also known as pet hotels or pet resorts, are specialized establishments that provide temporary care and accommodation for companion animals like dogs and cats when their owners are away. These facilities are staffed by trained and experienced caretakers who are dedicated to ensuring the comfort, safety, and well-being of the pets in their charge.',
       rate: 4.5,
       time: 'Monday - Friday at 8.00 am - 5.00pm',
       distance: 2.5),
@@ -41,6 +45,8 @@ List<BoardingPet> boardingPetList = [
       imgUrl: 'assets/images/bd2.jpg',
       name: 'Silver Paw Lodge',
       rate: 5,
+      desc:
+          'Pet boarding facilities, also known as pet hotels or pet resorts, are specialized establishments that provide temporary care and accommodation for companion animals like dogs and cats when their owners are away. These facilities are staffed by trained and experienced caretakers who are dedicated to ensuring the comfort, safety, and well-being of the pets in their charge',
       time: 'Monday - Friday at 8.00 am - 5.00pm',
       distance: 2.5),
 ];

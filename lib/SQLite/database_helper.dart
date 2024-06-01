@@ -12,8 +12,12 @@ class DatabaseHelper {
    CREATE TABLE users (
    usrId INTEGER PRIMARY KEY AUTOINCREMENT,
    email TEXT UNIQUE,
+   usrName TEXT,  
    usrPassword TEXT,
-   imgStr TEXT
+   imgStr TEXT,
+   phone TEXT,
+   adress TEXT,
+   gender TEXT
    )
    ''';
   String pet = '''
@@ -59,7 +63,6 @@ class DatabaseHelper {
   Future<int> createUser(Users usr) async {
     final Database db = await initDB();
     int userId = await db.insert("users", usr.toMap());
-    // print('userId: $userId');
     return userId;
   }
 
@@ -68,6 +71,37 @@ class DatabaseHelper {
     final Database db = await initDB();
     var res = await db.query("users", where: "email = ?", whereArgs: [email]);
     return res.isNotEmpty ? Users.fromMap(res.first) : null;
+  }
+
+  Future<Users?> getUserInfo(int userId) async {
+    final Database db = await initDB();
+    List<Map<String, dynamic>> res = await db.query(
+      "users",
+      where: "usrId = ?",
+      whereArgs: [userId],
+    );
+
+    if (res.isNotEmpty) {
+      return Users.fromMap(res.first);
+    } else {
+      return null;
+    }
+  }
+
+  Future<int> updateUserById(Map<String, dynamic> user, int userId) async {
+    final Database db = await initDB();
+    int count =
+        await db.update("users", user, where: "usrId = ?", whereArgs: [userId]);
+    return count;
+  }
+
+  Future<int> changePasswordByUserId(int userId, String newPassword) async {
+    final Database db = await initDB();
+    Map<String, dynamic> updatedUserData = {'usrPassword': newPassword};
+
+    int rowsAffected = await db.update('users', updatedUserData,
+        where: 'usrId = ?', whereArgs: [userId]);
+    return rowsAffected;
   }
 
   Future<String?> getUserImageById(int userId) async {

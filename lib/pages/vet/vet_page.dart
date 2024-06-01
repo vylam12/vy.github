@@ -98,73 +98,86 @@ class _VetPageState extends State<VetPage> {
                       product[selectedCategoryIndex].values.first;
                   final dynamic productItem = productList[index];
                   //hiển thị item
-                  if (productItem is Veterinarians) {
-                    final Veterinarians veterinarians = productItem;
-                    return VetItems(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VetDetailPage(
-                              productItem: veterinarians,
+                  switch (productItem.runtimeType) {
+                    case Veterinarians:
+                      final Veterinarians veterinarians =
+                          productItem as Veterinarians;
+                      return VetItems(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VetDetailPage(
+                                productItem: veterinarians,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      nameItem: veterinarians.name ?? '',
-                      priceItem: veterinarians.price?.toStringAsFixed(0) ?? '',
-                      imageItem: veterinarians.imgUrl ?? '',
-                      ratingItem: veterinarians.rate,
-                      timeItem: veterinarians.time ?? '',
-                      distanceItem: veterinarians.distance.toString(),
-                    );
-                  } else if (productItem is Grooming) {
-                    final Grooming grooming = productItem;
-                    return VetItems(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VetDetailPage(
-                              productItem: grooming,
+                          );
+                        },
+                        nameItem: veterinarians.name ?? '',
+                        priceItem:
+                            veterinarians.price?.toStringAsFixed(0) ?? '',
+                        imageItem: veterinarians.imgUrl ?? '',
+                        ratingItem: veterinarians.rate,
+                        timeItem: veterinarians.time ?? '',
+                        distanceItem: veterinarians.distance.toString(),
+                      );
+                    case Grooming:
+                      final Grooming grooming = productItem as Grooming;
+                      return VetItems(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VetDetailPage(
+                                productItem: grooming,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      nameItem: grooming.name ?? '',
-                      ratingItem: grooming.rate,
-                      priceItem: grooming.price?.toStringAsFixed(0) ?? '',
-                      imageItem: grooming.imgUrl ?? '',
-                      timeItem: grooming.time ?? '',
-                      distanceItem: grooming.distance.toString(),
-                    );
-                  } else if (productItem is BoardingPet) {
-                    final BoardingPet boardingPet = productItem;
-                    return VetItems(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VetDetailPage(
-                              productItem: boardingPet,
+                          );
+                        },
+                        nameItem: grooming.name ?? '',
+                        ratingItem: grooming.rate,
+                        priceItem: grooming.price?.toStringAsFixed(0) ?? '',
+                        imageItem: grooming.imgUrl ?? '',
+                        timeItem: grooming.time ?? '',
+                        distanceItem: grooming.distance.toString(),
+                      );
+                    case BoardingPet:
+                      final BoardingPet boardingPet =
+                          productItem as BoardingPet;
+                      return VetItems(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VetDetailPage(
+                                productItem: boardingPet,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      distanceItem: boardingPet.distance.toString(),
-                      ratingItem: boardingPet.rate,
-                      nameItem: boardingPet.name ?? '',
-                      priceItem: boardingPet.price?.toStringAsFixed(0) ?? '',
-                      imageItem: boardingPet.imgUrl ?? '',
-                      timeItem: boardingPet.time ?? '',
-                    );
+                          );
+                        },
+                        distanceItem: boardingPet.distance.toString(),
+                        ratingItem: boardingPet.rate,
+                        nameItem: boardingPet.name ?? '',
+                        priceItem: boardingPet.price?.toStringAsFixed(0) ?? '',
+                        imageItem: boardingPet.imgUrl ?? '',
+                        timeItem: boardingPet.time ?? '',
+                      );
+                    default:
+                      return const SizedBox();
                   }
                 },
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 0,
-                    childAspectRatio: 3.9 / 2),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  // số lượng item trên mỗi hàng (trục ngang)
+                  crossAxisCount: 1,
+                  // Khoảng cách giữa các item trên trục ngang
+                  crossAxisSpacing: 2,
+                  //Khoảng cách giữa các item trên trục dọc
+                  mainAxisSpacing: 0,
+                  // Tỉ lệ khung hình (aspect ratio) của các item
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height * 0.32 -
+                          kToolbarHeight),
+                ),
               ),
             ),
           ],

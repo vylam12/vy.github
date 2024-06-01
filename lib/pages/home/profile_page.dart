@@ -1,11 +1,15 @@
+import 'package:carepet/pages/home/change_profile.dart';
+import 'package:carepet/pages/home/change_pass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import '../../SQLite/database_helper.dart';
+import '../../models/users.dart';
 import '../../resources/app_color.dart';
 import '../pet/add_pet_page.dart';
 import '../sign/login_page.dart';
@@ -22,14 +26,11 @@ class _ProfilePageState extends State<ProfilePage> {
   File? image;
   String? userImage;
   final db = DatabaseHelper();
-
-  Future<String?> getProfileImage() async {
-    return await db.getUserImageById(widget.userId);
-  }
-
+  final userInfoNotifier = ValueNotifier<Users?>(null);
   @override
   void initState() {
     super.initState();
+    usr();
     getProfileImage().then((String? imagePath) {
       if (imagePath != null) {
         setState(() {
@@ -37,6 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     });
+  }
+
+  Future<String?> getProfileImage() async {
+    return await db.getUserImageById(widget.userId);
   }
 
   Future<void> logout() async {
@@ -49,20 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
         (route) => false);
   }
 
-  Future<void> pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
-
-      // Save image to database
-      if (widget.userId != null) {
-        db.addImageToUser(widget.userId, image.path);
-      }
-    } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
-    }
+  Future<void> usr() async {
+    final userInfo = await db.getUserInfo(widget.userId);
+    userInfoNotifier.value = userInfo;
   }
 
   @override
@@ -96,36 +90,108 @@ class _ProfilePageState extends State<ProfilePage> {
                         radius: 54.0,
                         backgroundImage:
                             AssetImage('assets/images/nguoidung.png')),
-                Positioned(
-                    bottom: 0.0,
-                    right: 0.0,
-                    child: GestureDetector(
-                      onTap: () => pickImage(),
-                      child: Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100.0),
-                          border: Border.all(color: AppColor.green, width: 2.0),
-                          color: AppColor.textButton.withOpacity(0.9),
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt_outlined,
-                          color: AppColor.green,
-                          size: 27.0,
-                        ),
-                      ),
-                    ))
               ],
             ),
             const SizedBox(height: 20.0),
             Container(
               width: 372.0,
               decoration: BoxDecoration(
-                  color: AppColor.textButton,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                      color: const Color.fromRGBO(212, 212, 212, 1))),
+                color: AppColor.textButton,
+                borderRadius: BorderRadius.circular(10.0),
+                border:
+                    Border.all(color: const Color.fromRGBO(212, 212, 212, 1)),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      blurRadius: 43.78,
+                      spreadRadius: 0,
+                      offset: Offset(0, 5.47)),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: ValueListenableBuilder(
+                  valueListenable: userInfoNotifier,
+                  builder: (context, Users? userInfo, _) {
+                    if (userInfo != null) {
+                      return Column(
+                        children: [
+                          const Gap(10),
+                          Row(
+                            children: [
+                              Text(
+                                userInfo.usrName ?? '',
+                                style: GoogleFonts.fredoka(
+                                    fontSize: 26.0,
+                                    textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColor.black)),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: logout,
+                                child: Row(children: [
+                                  const Icon(
+                                    FontAwesomeIcons.arrowRightFromBracket,
+                                    size: 15,
+                                    color: Color.fromRGBO(229, 77, 77, 1),
+                                  ),
+                                  const Gap(10),
+                                  Text(
+                                    'Sign out',
+                                    style: GoogleFonts.fredoka(
+                                        fontSize: 13.0,
+                                        textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Color.fromRGBO(
+                                                229, 77, 77, 1))),
+                                  ),
+                                ]),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Gap(15),
+                              const Icon(Icons.email_outlined),
+                              const Gap(10),
+                              Text(
+                                userInfo.email ?? '',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 15.0,
+                                    textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.black)),
+                              ),
+                            ],
+                          ),
+                          const Gap(10),
+                        ],
+                      );
+                    } else {
+                      // Hiển thị một tiêu đề tải nếu dữ liệu đang được tải
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ),
+            ),
+            const Gap(10),
+            Container(
+              width: 372.0,
+              decoration: BoxDecoration(
+                color: AppColor.textButton,
+                borderRadius: BorderRadius.circular(10.0),
+                border:
+                    Border.all(color: const Color.fromRGBO(212, 212, 212, 1)),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      blurRadius: 43.78,
+                      spreadRadius: 0,
+                      offset: Offset(0, 5.47)),
+                ],
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
@@ -134,11 +200,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 10.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeProfile(userId: widget.userId))),
                         child: const Row(
                           children: [
                             Icon(Icons.person),
-                            Text('About me'),
+                            Text('Change profile'),
                           ],
                         ),
                       ),
@@ -160,14 +229,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const Gap(10),
                     Container(
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       child: GestureDetector(
-                        onTap: logout,
-                        child: const Row(children: [
-                          Icon(
-                            Icons.sign_language,
-                          ),
-                          Text('Sign out'),
-                        ]),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangePass(userId: widget.userId)));
+                        },
+                        child: const Row(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.key,
+                              size: 20,
+                            ),
+                            Text('Change Password'),
+                          ],
+                        ),
                       ),
                     ),
                   ],

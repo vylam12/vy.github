@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
+import '../../models/users.dart';
 import '../../resources/app_color.dart';
 import 'input_pass_forget.dart';
 
@@ -15,25 +16,20 @@ class ForgetPassPage extends StatefulWidget {
 
 class _ForgetPassPageState extends State<ForgetPassPage> {
   final email = TextEditingController();
-  final password = TextEditingController();
-  final confirmPassword = TextEditingController();
   String emailError = '';
-  String passwordError = '';
-  String confirmPasswordError = '';
-  bool isPasswordValid = true;
-  bool isConfirmPasswordValid = true;
   bool isEmailValid = true;
   final db = DatabaseHelper();
 
   Future<void> submit() async {
-    try {
+    Users? usrDetails = await db.getUser(email.text);
+    if (usrDetails != null) {
+      int usrId = usrDetails?.usrId ?? 0;
+      print('-----------ID${usrId}------------------');
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const InputPassForget()),
+        MaterialPageRoute(builder: (context) => InputPassForget(userId: usrId)),
       );
-    } catch (error) {
-      showSnackbar('Error: $error');
     }
   }
 
@@ -102,17 +98,13 @@ class _ForgetPassPageState extends State<ForgetPassPage> {
                         color: AppColor.textButton,
                       )),
                   const Gap(20.0),
-                  Text(
-                    "It's okay! Reset your password",
-                    style: GoogleFonts.fredoka(
-                      fontSize: 25.0,
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.textButton,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
+                  Text("It's okay! Reset your password",
+                      style: GoogleFonts.fredoka(
+                          fontSize: 25.0,
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: AppColor.textButton))),
+                  const Gap(20.0),
                   Container(
                     width: 382.0,
                     decoration: BoxDecoration(

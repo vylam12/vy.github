@@ -1,8 +1,8 @@
 import 'package:carepet/component/app_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../component/oval_bottom_clipper.dart';
 import '../../resources/app_color.dart';
 
@@ -11,6 +11,9 @@ class VetDetailPage extends StatelessWidget {
   final dynamic productItem;
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    double screenWidth = screenSize.width;
+    double screenHeight = screenSize.height;
     return Scaffold(
       appBar: AppBar(
           title: Text('Vet',
@@ -115,6 +118,43 @@ class VetDetailPage extends StatelessWidget {
                             ]),
                           ],
                         ),
+                        const Gap(8),
+                        Row(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.locationDot,
+                              size: 18.0,
+                              color: AppColor.grey,
+                            ),
+                            const Gap(8),
+                            Text(
+                              '${productItem.distance.toString()}km',
+                              style: GoogleFonts.fredoka(
+                                fontSize: 13.0,
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.grey),
+                              ),
+                            ),
+                            const Gap(20),
+                            const Icon(
+                              FontAwesomeIcons.circleDollarToSlot,
+                              size: 18.0,
+                              color: AppColor.grey,
+                            ),
+                            const Gap(3),
+                            Text(
+                              '${productItem.price.toString()}\$ ',
+                              style: GoogleFonts.fredoka(
+                                fontSize: 13.0,
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(7),
                         Row(
                           children: [
                             const Icon(Icons.access_time_sharp),
@@ -133,16 +173,31 @@ class VetDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Gap(30),
-                  AppElevatedButton(
-                      height: 60,
-                      width: 320,
-                      text: 'Book an Appoinment',
-                      textColor: AppColor.textButton,
-                      color: AppColor.green,
-                      borderColor: AppColor.green)
+                  const Gap(15),
+                  Container(
+                    width: 340,
+                    child: Text(
+                      productItem.desc,
+                      style: GoogleFonts.fredoka(
+                          fontSize: 13.7,
+                          textStyle:
+                              const TextStyle(fontWeight: FontWeight.w400)),
+                    ),
+                  ),
                 ],
               )),
+          Positioned(
+              right: 0,
+              left: 0,
+              bottom: 20.0,
+              child: AppElevatedButton(
+                  onPressed: () {},
+                  height: 60,
+                  width: 320,
+                  text: 'Book an Appoinment',
+                  textColor: AppColor.textButton,
+                  color: AppColor.green,
+                  borderColor: AppColor.green))
         ],
       ),
     );

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
@@ -36,102 +35,199 @@ class PetStatus extends StatelessWidget {
               )),
         ),
         const Gap(10),
+
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Health',
-                    style: GoogleFonts.fredoka(
-                        fontSize: 16.0,
-                        textStyle:
-                            const TextStyle(fontWeight: FontWeight.w400)),
-                  ),
-                  const Gap(10.0),
-                  Container(
-                    width: 100,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: AppColor.green,
-                        borderRadius: BorderRadius.circular(20.0)),
-                  ),
-                  const Gap(30.0),
-                  Text(
-                    '88%',
-                    style: GoogleFonts.inter(
-                        fontSize: 13.7,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.green,
-                        )),
-                  ),
-                ],
+              Text(
+                'Health',
+                style: GoogleFonts.fredoka(
+                    fontSize: 16.0,
+                    textStyle: const TextStyle(fontWeight: FontWeight.w400)),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Food',
-                    style: GoogleFonts.fredoka(
-                        fontSize: 16.0,
-                        textStyle:
-                            const TextStyle(fontWeight: FontWeight.w400)),
-                  ),
-                  const Gap(22.0),
-                  Container(
-                    width: 41,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(229, 77, 77, 1.0),
-                        borderRadius: BorderRadius.circular(20.0)),
-                  ),
-                  const Gap(92.0),
-                  Text('41%',
-                      style: GoogleFonts.inter(
-                          fontSize: 13.7,
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromRGBO(229, 77, 77, 1.0),
-                          ))),
-                ],
+              Text(
+                'Food',
+                style: GoogleFonts.fredoka(
+                    fontSize: 16.0,
+                    textStyle: const TextStyle(fontWeight: FontWeight.w400)),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Mood',
-                    style: GoogleFonts.fredoka(
-                        fontSize: 16.0,
-                        textStyle:
-                            const TextStyle(fontWeight: FontWeight.w400)),
-                  ),
-                  const Gap(17.0),
-                  Container(
-                    width: 51,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(229, 77, 77, 1.0),
-                        borderRadius: BorderRadius.circular(20.0)),
-                  ),
-                  const Gap(82.0),
-                  Text(
-                    '51%',
-                    style: GoogleFonts.inter(
-                        fontSize: 13.7,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(229, 77, 77, 1.0),
-                        )),
-                  ),
-                ],
+              Text(
+                'Mood',
+                style: GoogleFonts.fredoka(
+                    fontSize: 16.0,
+                    textStyle: const TextStyle(fontWeight: FontWeight.w400)),
               ),
             ],
           ),
         ),
+        const Gap(5),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 100,
+                height: 10,
+                decoration: BoxDecoration(
+                    color: AppColor.green,
+                    borderRadius: BorderRadius.circular(20.0)),
+              ),
+              const Gap(13.0),
+              Container(
+                width: 41,
+                height: 10,
+                decoration: BoxDecoration(
+                    color: const Color.fromRGBO(229, 77, 77, 1.0),
+                    borderRadius: BorderRadius.circular(20.0)),
+              ),
+              const Gap(13.0),
+              Container(
+                width: 51,
+                height: 10,
+                decoration: BoxDecoration(
+                    color: const Color.fromRGBO(229, 77, 77, 1.0),
+                    borderRadius: BorderRadius.circular(20.0)),
+              ),
+            ],
+          ),
+        ),
+        const Gap(7),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: Column(
+            children: [
+              Text(
+                '88%',
+                style: GoogleFonts.inter(
+                    fontSize: 13.7,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.green,
+                    )),
+              ),
+              const Gap(5),
+              Text(
+                '41%',
+                style: GoogleFonts.inter(
+                    fontSize: 13.7,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromRGBO(229, 77, 77, 1.0),
+                    )),
+              ),
+              const Gap(5),
+              Text(
+                '51%',
+                style: GoogleFonts.inter(
+                    fontSize: 13.7,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromRGBO(229, 77, 77, 1.0),
+                    )),
+              ),
+            ],
+          ),
+        ),
+
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(vertical: 20.0),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Text(
+        //             'Health',
+        //             style: GoogleFonts.fredoka(
+        //                 fontSize: 16.0,
+        //                 textStyle:
+        //                     const TextStyle(fontWeight: FontWeight.w400)),
+        //           ),
+        //           const Gap(10.0),
+        //           Container(
+        //             width: 100,
+        //             height: 10,
+        //             decoration: BoxDecoration(
+        //                 color: AppColor.green,
+        //                 borderRadius: BorderRadius.circular(20.0)),
+        //           ),
+        //           const Gap(30.0),
+        //           Text(
+        //             '88%',
+        //             style: GoogleFonts.inter(
+        //                 fontSize: 13.7,
+        //                 textStyle: const TextStyle(
+        //                   fontWeight: FontWeight.w600,
+        //                   color: AppColor.green,
+        //                 )),
+        //           ),
+        //         ],
+        //       ),
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             'Food',
+        //             style: GoogleFonts.fredoka(
+        //                 fontSize: 16.0,
+        //                 textStyle:
+        //                     const TextStyle(fontWeight: FontWeight.w400)),
+        //           ),
+        //           const Gap(22.0),
+        //           Container(
+        //             width: 41,
+        //             height: 10,
+        //             decoration: BoxDecoration(
+        //                 color: const Color.fromRGBO(229, 77, 77, 1.0),
+        //                 borderRadius: BorderRadius.circular(20.0)),
+        //           ),
+        //           const Gap(92.0),
+        //           Text('41%',
+        //               style: GoogleFonts.inter(
+        //                   fontSize: 13.7,
+        //                   textStyle: const TextStyle(
+        //                     fontWeight: FontWeight.w600,
+        //                     color: Color.fromRGBO(229, 77, 77, 1.0),
+        //                   ))),
+        //         ],
+        //       ),
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             'Mood',
+        //             style: GoogleFonts.fredoka(
+        //                 fontSize: 16.0,
+        //                 textStyle:
+        //                     const TextStyle(fontWeight: FontWeight.w400)),
+        //           ),
+        //           const Gap(17.0),
+        //           Container(
+        //             width: 51,
+        //             height: 10,
+        //             decoration: BoxDecoration(
+        //                 color: const Color.fromRGBO(229, 77, 77, 1.0),
+        //                 borderRadius: BorderRadius.circular(20.0)),
+        //           ),
+        //           const Gap(82.0),
+        //           Text(
+        //             '51%',
+        //             style: GoogleFonts.inter(
+        //                 fontSize: 13.7,
+        //                 textStyle: const TextStyle(
+        //                   fontWeight: FontWeight.w600,
+        //                   color: Color.fromRGBO(229, 77, 77, 1.0),
+        //                 )),
+        //           ),
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // ),
         const Gap(10),
       ],
     );

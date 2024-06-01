@@ -1,5 +1,7 @@
 import 'package:carepet/resources/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,11 +11,13 @@ class ProductItem extends StatelessWidget {
       required this.nameProduct,
       required this.imageProduct,
       required this.priceProduct,
-      required this.weight});
+      required this.weight,
+      required this.onTap});
   final String nameProduct;
   final String priceProduct;
   final String weight;
   final String imageProduct;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +80,24 @@ class ProductItem extends StatelessWidget {
                               color: AppColor.grey))),
                   const Divider(
                       thickness: 1, color: Color.fromARGB(255, 226, 226, 226)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.shopping_bag_outlined,
-                        color: AppColor.green,
-                      ),
-                      const Gap(5),
-                      Text('Add to cart',
-                          style: GoogleFonts.fredoka(
-                              fontSize: 14.0,
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColor.black))),
-                    ],
+                  GestureDetector(
+                    onTap: onTap,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.shopping_bag_outlined,
+                          color: AppColor.green,
+                        ),
+                        const Gap(5),
+                        Text('Add to cart',
+                            style: GoogleFonts.fredoka(
+                                fontSize: 14.0,
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.black))),
+                      ],
+                    ),
                   )
                 ],
               ),

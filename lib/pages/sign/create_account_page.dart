@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../SQLite/database_helper.dart';
 import '../../component/app_elevated_button.dart';
@@ -16,6 +18,7 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final email = TextEditingController();
+  final usrName = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
   String emailError = '';
@@ -34,12 +37,22 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
     try {
       var res = await db.createUser(Users(
-          email: email.text,
-          password: password.text,
-          imgStr: 'assets/images/nguoidung.png'));
+        email: email.text,
+        usrName: usrName.text,
+        password: password.text,
+      ));
       print(res);
       if (res > 0) {
         if (!mounted) return;
+        Fluttertoast.showToast(
+            msg: "Sign Up Success!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -54,7 +67,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   bool isValidForm() {
-    return isEmailValid && isPasswordValid && isConfirmPasswordValid;
+    return isEmailValid &&
+        isPasswordValid &&
+        isConfirmPasswordValid &&
+        usrName.text.isNotEmpty;
   }
 
   void showSnackbar(String message) {
@@ -143,7 +159,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 20.0),
+                  const Gap(20.0),
+                  AppTextFormField(
+                    controller: usrName,
+                    isPassword: false,
+                    hintText: 'Your Name ',
+                    icon: const Icon(Icons.person),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const Gap(20),
                   AppTextFormField(
                     controller: email,
                     isPassword: false,

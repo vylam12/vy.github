@@ -15,6 +15,7 @@ class AppElevatedButton extends StatelessWidget {
     required this.borderColor,
     this.fontSize = 20.0,
   });
+
   final Function()? onPressed;
   final double height;
   final double width;

@@ -300,9 +300,7 @@ class _AddPetPageState extends State<AddPetPage> {
                   textColor: AppColor.textButton,
                   color: AppColor.green,
                   borderColor: AppColor.green,
-                  onPressed: () {
-                    addPet();
-                  },
+                  onPressed: addPet,
                 ),
                 const Gap(24),
               ],
