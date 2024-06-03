@@ -134,6 +134,14 @@ class DatabaseHelper {
     }
   }
 
+  // Add image to user profile
+  Future<void> addImageToUser(int userId, String imageFile) async {
+    final Database db = await initDB();
+    String imagePath = imageFile;
+    await db.rawUpdate(
+        "UPDATE users SET imgStr = ? WHERE usrId = ?", [imagePath, userId]);
+  }
+
   //get pet
   Future<List<Pets>> getPetsByUserId(int userId) async {
     final Database db = await initDB();
@@ -148,12 +156,12 @@ class DatabaseHelper {
     return pets;
   }
 
-  // Add image to user profile
-  Future<void> addImageToUser(int userId, String imageFile) async {
+  // Add image to pet profile
+  Future<void> addImageToPet(int petId, String imageFile) async {
     final Database db = await initDB();
     String imagePath = imageFile;
     await db.rawUpdate(
-        "UPDATE users SET imgStr = ? WHERE usrId = ?", [imagePath, userId]);
+        "UPDATE pets SET imgStr = ? WHERE petId = ?", [imagePath, petId]);
   }
 
   Future<Pets> getPetById(int petId) async {
@@ -169,6 +177,13 @@ class DatabaseHelper {
         await db.update("pets", pets, where: "petId = ?", whereArgs: [id]);
     return count;
   }
+
+  // Future<int> updatePetById(Map<String, dynamic> pets, int id) async {
+  //   final Database db = await initDB();
+  //   int count =
+  //       await db.update("pets", pets, where: "petId = ?", whereArgs: [id]);
+  //   return count;
+  // }
 
 //delete pet
   Future<int> deletePetById(int petId) async {

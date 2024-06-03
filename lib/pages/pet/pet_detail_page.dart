@@ -180,7 +180,7 @@ class PetDetailPage extends StatelessWidget {
                             const Gap(10),
                             InfoPetDetail(
                               hintText: 'Color',
-                              textPet: '${pet.weight} kg',
+                              textPet: '${pet.color}',
                             ),
                           ],
                         ),
@@ -246,7 +246,7 @@ class PetDetailPage extends StatelessWidget {
                       radius: 55,
                       backgroundImage: FileImage(
                         File(
-                          pet.imgStr.isNotEmpty == true ? pet.imgStr : '',
+                          pet.imgStr!.isNotEmpty ? pet.imgStr! : '',
                         ),
                       ),
                     ),

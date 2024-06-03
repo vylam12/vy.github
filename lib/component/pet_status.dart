@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/pet.dart';
@@ -30,7 +29,7 @@ class PetStatus extends StatelessWidget {
           child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: Image.file(
-                File(pet.imgStr),
+                File(pet.imgStr ?? ''),
                 fit: BoxFit.cover,
               )),
         ),

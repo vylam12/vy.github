@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:carepet/pages/pet/pet_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -32,47 +31,33 @@ class _UpdatePetDetailPageState extends State<UpdatePetDetailPage> {
   final db = DatabaseHelper();
   Pets pet = Pets(
       age: 0,
-      breedName: "breedName",
-      name: "name",
-      color: "color",
+      // breedName: "breedName",
+      // name: "name",
+      // color: "color",
+      breedName: '',
+      name: '',
+      color: '',
       height: 123,
       userId: 0,
-      gender: "",
+      // gender: "",
       weight: 0,
-      imgStr: "");
+      imgStr: '');
+
   Future<String?> getPetImage() async {
-    return await db.getPetImageById(widget.userId);
+    return await db.getPetImageById(widget.petId);
   }
 
   @override
   void initState() {
     super.initState();
     getPets(widget.petId);
-    loadPetsValue(pet);
+    // loadPetsValue(pet);
     getPetImage().then((String? imagePath) {
       if (imagePath != null) {
         setState(() {
           image = File(imagePath);
         });
       }
-    });
-  }
-
-  Future<void> loadPetsValue(Pets pet) async {
-    height.text = pet.height.toString();
-    weight.text = pet.weight.toString();
-    petName.text = pet.name.toString();
-    breedName.text = pet.breedName.toString();
-    gender = pet.gender.toString();
-    age.text = pet.age.toString();
-    color.text = pet.color.toString();
-  }
-
-  Future<void> getPets(int petId) async {
-    var petData = await db.getPetById(petId);
-    await loadPetsValue(petData);
-    setState(() {
-      pet = petData;
     });
   }
 
@@ -84,6 +69,45 @@ class _UpdatePetDetailPageState extends State<UpdatePetDetailPage> {
       this.image = imageTemporary;
       imagePath = imageTemporary.path;
     });
+    if (widget.petId != null) {
+      db.addImageToPet(widget.petId, image.path);
+    }
+  }
+
+  // Future<void> loadPetsValue(Pets pet) async {
+  //   height.text = pet.height.toString();
+  //   weight.text = pet.weight.toString();
+  //   petName.text = pet.name.toString();
+  //   breedName.text = pet.breedName.toString();
+  //   gender = pet.gender.toString();
+  //   age.text = pet.age.toString();
+  //   color.text = pet.color.toString();
+  // }
+
+  // Future<void> getPets(int petId) async {
+  //   var petData = await db.getPetById(petId);
+  //   await loadPetsValue(petData);
+  //   setState(() {
+  //     pet = petData;
+  //   });
+  // }
+  Future<void> getPets(int petId) async {
+    var petData = await db.getPetById(petId);
+    // await loadPetsValue(petData);
+    if (petData != null) {
+      setState(() {
+        pet = petData;
+        height.text = pet.height.toString();
+        weight.text = pet.weight.toString();
+        petName.text = pet.name.toString();
+        breedName.text = pet.breedName.toString();
+        gender = pet.gender.toString();
+        age.text = pet.age.toString();
+        color.text = pet.color.toString();
+        imagePath = pet.imgStr;
+      });
+      print(imagePath);
+    }
   }
 
   Future<void> updatePets() async {
@@ -93,16 +117,26 @@ class _UpdatePetDetailPageState extends State<UpdatePetDetailPage> {
       );
       return;
     }
-    Map<String, dynamic> updateData = {
-      "imgStr": image != null ? image!.path : '',
-      "height": height.text,
-      "weight": weight.text,
-      "name": petName.text,
-      "breedName": breedName.text,
-      "gender": gender,
-      "age": age.text,
-      "color": color.text
+    final updateData = {
+      'imgStr': imagePath,
+      'height': height.text,
+      'weight': weight.text,
+      'name': petName.text,
+      'breedName': breedName.text,
+      'gender': gender,
+      'age': age.text,
+      'color': color.text
     };
+    // Map<String, dynamic> updateData = {
+    //   "imgStr": image != null ? image!.path : '',
+    //   "height": height.text,
+    //   "weight": weight.text,
+    //   "name": petName.text,
+    //   "breedName": breedName.text,
+    //   "gender": gender,
+    //   "age": age.text,
+    //   "color": color.text
+    // };
 
     var result = await db.updatePetById(updateData, widget.petId);
     if (result == 1) {

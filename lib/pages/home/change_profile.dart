@@ -21,7 +21,6 @@ class ChangeProfile extends StatefulWidget {
 class _ChangeProfileState extends State<ChangeProfile> {
   File? image;
   String? imagePath;
-  String? userImage;
   String? gender;
   final userInfoNotifier = ValueNotifier<Users?>(null);
   final phone = TextEditingController();
